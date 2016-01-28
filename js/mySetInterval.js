@@ -1,24 +1,38 @@
 (function() {
-    "use strict";
-    var myInt;
+    'use strict';
+    var myObjId = {};
 
     function mySetInterval(func, ms) {
+        var id = Symbol();
+
         function timer() {
             func();
-            myInt = setTimeout(timer, ms);
+            myObjId[id] = setTimeout(timer, ms);
         }
         timer();
+        return id;
     }
 
-    function myClearInterval(myVar) {
-        clearTimeout(myVar);
+    function myClearInterval(id) {
+        var myId = myObjId[id];
+        clearTimeout(myId);
     }
-
+    // functions for test
     function sayHi() {
+        console.log('Hi');
+    }
+
+    function sayHello() {
         console.log('Hello World!');
     }
-    mySetInterval(sayHi, 2000);
+    // test mySetInterval
+    var idSayHi = mySetInterval(sayHi, 2000);
+    var idSayHello = mySetInterval(sayHello, 3000);
+    // test myClearInterval
     setTimeout(function() {
-        myClearInterval(myInt);
+        myClearInterval(idSayHi);
     }, 6010);
+    setTimeout(function() {
+        myClearInterval(idSayHello);
+    }, 12010);
 })();
